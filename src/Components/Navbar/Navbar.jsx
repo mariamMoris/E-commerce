@@ -2,19 +2,21 @@ import React, { useContext } from "react";
 import logo from "../../Assets/images/freshcart-logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../../contexts/Authcontext";
+import { cartContent } from "../../contexts/CartContent";
 
 export default function Navbar() {
   const { isLoggin, setIsLoggin } = useContext(authContext);
-  const navigate = useNavigate()
-  function logOut(){
-    setIsLoggin(false)
-    localStorage.removeItem("token")
-    navigate("/login")
+  const navigate = useNavigate();
+  const { numOfCartItems } = useContext(cartContent);
+  function logOut() {
+    setIsLoggin(false);
+    localStorage.removeItem("token");
+    navigate("/login");
   }
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <nav className="navbar navbar-expand-lg bg-body-tertiary  position-fixed top-0 end-0 start-0 z-2">
         <div className="container">
           <a className="navbar-brand">
             <img src={logo} alt="fresh cart logo" />
@@ -58,6 +60,11 @@ export default function Navbar() {
                     Brands
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="wishlist" className="nav-link">
+                    WishList
+                  </Link>
+                </li>
               </ul>
             )}
 
@@ -70,9 +77,21 @@ export default function Navbar() {
                 <i className="fab mx-2 fa-tiktok"></i>
               </li>
               {isLoggin ? (
-                <li className="nav-item">
-                  <span onClick={logOut} className="nav-link cursor-pointer">Logout</span>
-                </li>
+                <>
+                  <li className="nav-item position-relative ">
+                    <Link to="cart">
+                      <i className="fa-solid fa-cart-shopping nav-link mt-1 mb-lg-0"></i>
+                      <span className=" text-main fw-bold rounded position-absolute top-0 end-0 ">
+                        {numOfCartItems}
+                      </span>
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <span onClick={logOut} className="nav-link cursor-pointer">
+                      Logout
+                    </span>
+                  </li>
+                </>
               ) : (
                 <>
                   <li className="nav-item">

@@ -20,10 +20,15 @@ import ForgetPassword from "./Components/ForgetPass/ForgetPassword"
 import ResetPassword from "./Components/ForgetPass/ResetPassword"
 import ProductDetails from "./Components/ProductDetails/ProductDetails";
 import VerifyCode from "./Components/ForgetPass/VerifyCode";
-
+import CheckOut from "./Components/CheckOut/CheckOut";
+import Wishlist from "./Components/Wishlist/Wishlist";
+import  CartContentProvider from "./contexts/CartContent"
+import AllOrders from "./Components/AllOrders/AllOrders";
 
 
 function App() {
+ 
+
   const router = createBrowserRouter([
     {
       path: "",
@@ -32,10 +37,13 @@ function App() {
         { path: "", element: <Navigate to={"home"} /> },
         { path: "home", element: <ProtectedRoute> <Home /> </ProtectedRoute>  },
         { path: "cart", element: <ProtectedRoute> <Cart /> </ProtectedRoute> },
+        { path: "wishlist", element: <ProtectedRoute> <Wishlist /> </ProtectedRoute> },
+        { path: "/checkout", element: <ProtectedRoute> <CheckOut /> </ProtectedRoute> },
         { path: "products", element: <ProtectedRoute> <Products /> </ProtectedRoute> },
         { path: "categories", element:<ProtectedRoute> <Categories /> </ProtectedRoute>  },
         { path: "brands", element:<ProtectedRoute> <Brands /> </ProtectedRoute>  },
         { path: "productdetails/:id", element:<ProtectedRoute> <ProductDetails /> </ProtectedRoute>  },
+        { path: "allorders", element:<ProtectedRoute> <AllOrders /> </ProtectedRoute>  },
         { path: "login", element:<AuthProtected> <Login /> </AuthProtected> },
         { path: "register", element:<AuthProtected> <Register /> </AuthProtected>  },
         { path: "forget", element:<AuthProtected> <ForgetPassword/> </AuthProtected>  },
@@ -50,9 +58,12 @@ function App() {
   ]);
   return (
     <>
+    < CartContentProvider>
       <AuthContextProvider>
         <RouterProvider router={router}></RouterProvider>
+      
       </AuthContextProvider>
+      </ CartContentProvider>
     </>
   );
 }

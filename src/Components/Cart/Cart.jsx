@@ -1,21 +1,23 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CartProducts from '../CartProducts/CartProducts';
+import { Link } from 'react-router-dom';
+import { cartContent } from '../../contexts/CartContent';
 
 export default function Cart() {
   const [isLoading,setIsLoading] = useState()
    const [cart,setCart] = useState({})
    const [timeOutId,setTimeOutId] = useState()
+   const {getCart,setCartId,setNumOfCartItems} = useContext(cartContent)
   async function getCartProducts(){
     setIsLoading(true)
    try {
-    const {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/cart",{
-      headers:{
-        token:localStorage.getItem("token")
-      }
-    })
+    const {data} = await getCart()
+      console.log(data);
     setIsLoading(false)
+    setNumOfCartItems(data?.numOfCartItems)
     setCart(data?.data)
+    console.log(data);
    } catch (error) {
     setIsLoading(false)
     console.log(error);
@@ -29,6 +31,8 @@ export default function Cart() {
       }
     })
     setCart(data?.data);
+    setNumOfCartItems(data?.numOfCartItems)
+
   }
   async function clearCart(){
     const {data} = await axios.delete("https://ecommerce.routemisr.com/api/v1/cart",{
@@ -37,6 +41,7 @@ export default function Cart() {
       }
     })
     setCart(data?.data);
+    setNumOfCartItems(data?.numOfCartItems)
   }
   async function updateCartQuantity(productId,count){
     clearTimeout(timeOutId)
@@ -56,6 +61,7 @@ export default function Cart() {
     },500))
  
   }
+  
   useEffect(()=>{
     getCartProducts()
   },[])
@@ -76,7 +82,7 @@ export default function Cart() {
   })}
   
   <div className='d-flex justify-content-between'>
-    <a className='btn bg-main text-white'>CheckOut</a>
+    <Link to="/checkout" className='btn bg-main text-white'>CheckOut</Link>
     <p>Total cart Price: {cart?.totalCartPrice} EGP</p>
   </div>
   </div>

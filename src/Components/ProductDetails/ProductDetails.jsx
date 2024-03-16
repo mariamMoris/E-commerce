@@ -1,21 +1,22 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Slider from "react-slick";
-
+import { cartContent } from '../../contexts/CartContent';
+import toast from 'react-hot-toast';
 
 function ProductDetails() {
+    const {addToCart,setNumOfCartItems} = useContext(cartContent)
     async function addProductToCart(productId){
-        const {data} = await axios.post("https://ecommerce.routemisr.com/api/v1/cart",{
-            productId:id
-        },{
-            headers:{
-                token:localStorage.getItem("token")
-            }
-        })
-        console.log(data)
-        alert(data.message)
-    }
+      const {data} = await addToCart(productId)
+      console.log(data);
+      if(data.status == "success"){
+        toast.success('Product added successfully');
+        setNumOfCartItems(data.numOfCartItems)
+    }else{
+      toast.error('Product not added ');
+
+    }}
     var settings = {
         dots: true,
         infinite: true,
@@ -23,6 +24,7 @@ function ProductDetails() {
         slidesToShow: 1,
         slidesToScroll: 1,
         arrows: false,
+        autoplay:true,
       };
     const {id} = useParams()
  const [productDetails,setProductDetails] = useState([])
@@ -67,19 +69,10 @@ function ProductDetails() {
                 </span>
             </p>
             <button onClick={()=>{addProductToCart(id)}} className='btn bg-main text-white w-100 mt-2'>Add To Cart</button>
-
         </div>
-
     </div>
         }
-           
-            
-          
         </>
-
-
-
     )
 }
-
 export default ProductDetails

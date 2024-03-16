@@ -11,6 +11,7 @@ export default function CategoriesSlider() {
         slidesToShow: 7,
         slidesToScroll: 3,
         arrows: false,
+        autoplay:true,
       };
   const [categories, setCategories] = useState([]);
 
