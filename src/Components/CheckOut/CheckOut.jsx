@@ -1,14 +1,12 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import React, { useContext, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { cartContent } from "../../contexts/CartContent";
 export default function CheckOut() {
   const [error, setError] = useState("");
   const [succesMsg, setSuccesMsg] = useState("");
   const [isloading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const {payment} = useContext(cartContent)
   const validationSchema = Yup.object({
    
@@ -18,6 +16,10 @@ export default function CheckOut() {
         /^(\+201|01|00201)[0-2,5]{1}[0-9]{8}$/,
         "Enter Egyption phone number"
       ),
+      details: Yup.string()
+      .required("details is requeried").min(5,"At least 5 characters"),
+      city: Yup.string()
+      .required("City is requeried").min(3,"At least 3 characters"),
   });
 
  
@@ -32,6 +34,8 @@ export default function CheckOut() {
   } = useFormik({
     initialValues: {
       phone: "",
+      details:"",
+      city:"",
     },
     onSubmit: paymentFunc,
     validationSchema,
@@ -54,7 +58,7 @@ export default function CheckOut() {
   return (
     <>
       <div className="w-75 m-auto my-5">
-        <h1>CheckOut :</h1>
+        <h1>Payment :</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="name" className="my-1">
             Details:
@@ -66,8 +70,8 @@ export default function CheckOut() {
             id="details"
             name="details"
           />
-          {errors.name && touched.name && (
-            <p className="alert alert-danger">{errors.name}</p>
+          {errors.details && touched.details && (
+            <p className="alert alert-danger">{errors.details}</p>
           )}
           
         
@@ -97,11 +101,11 @@ export default function CheckOut() {
             id="city"
             name="city"
           />
-          {errors.email && touched.email && (
-            <p className="alert alert-danger">{errors.email}</p>
+          {errors.city && touched.city && (
+            <p className="alert alert-danger">{errors.city}</p>
           )}
 
-          {error && (
+          {errors && (
             <div className="alert alert-danger text-center">{error}</div>
           )}
           {succesMsg && (

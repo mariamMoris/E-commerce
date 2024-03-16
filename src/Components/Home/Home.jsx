@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import img1 from "../../Assets/images/1.jpg";
 import img2 from "../../Assets/images/2.jpg";
 import img3 from "../../Assets/images/grocery-banner.png";
@@ -6,7 +6,6 @@ import img4 from "../../Assets/images/grocery-banner-2.jpeg";
 import Slider from "react-slick";
 import Products from "../Products/Products";
 import CategoriesSlider from "../Categories/CategoriesSlider";
-
 export default function Home() {
   var settings = {
     dots: true,

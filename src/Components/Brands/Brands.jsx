@@ -4,15 +4,27 @@ import { Link } from 'react-router-dom';
 
 export default function Brands() {
 const [brands,setbrands] = useState([])
+const [isLoading,setIsLoading] = useState()
+
 
   async function getBrands(){
+    setIsLoading(true)
     const {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/brands")
+    setIsLoading(false)
     setbrands(data.data);
   }
   useEffect(()=>{
     getBrands()
   },[])
-  return <>
+  return( 
+    <> {isLoading? 
+      <>
+      <div className='d-flex align-items-center justify-content-center my-5 py-5'>
+          <i className='fas fa-spin fa-spinner fa-2x'></i>
+      </div>
+  </>
+  :
+  <>
     <div className="row">
       <h1 className='text-main text-center fw-bold my-4'>All Brands</h1>
       {brands?.map((brand)=>{
@@ -26,5 +38,6 @@ const [brands,setbrands] = useState([])
         </div>)
       })}
     </div>
+    </>}
   </>
-}
+)}

@@ -20,6 +20,7 @@ function Product({ product }) {
   }
   async function addProductToWishlist(productId) {
     try {
+      
       const { data } = await axios.post(
         "https://ecommerce.routemisr.com/api/v1/wishlist",
         {
@@ -31,11 +32,8 @@ function Product({ product }) {
           },
         }
       );
-      document.querySelector(".fa-heart").classList.add("text-danger");
-      console.log(data);
-      alert(data.message);
+      
     } catch (error) {
-      document.querySelector(".fa-heart").classList.remove("text-danger");
       console.log(error);
     }
   }
