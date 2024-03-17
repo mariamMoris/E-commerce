@@ -1,26 +1,25 @@
 import { toBeChecked } from "@testing-library/jest-dom/matchers";
 import axios from "axios";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { cartContent } from "../../contexts/CartContent";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 function Product({ product }) {
-  const {addToCart,setNumOfCartItems} = useContext(cartContent);
+  const { addToCart, setNumOfCartItems } = useContext(cartContent);
   async function addProductToCart(productId) {
     const res = await addToCart(productId);
-    if(res.data.status == "success"){
-      toast.success('Product added successfully',{
-        position:"top-center"
+    if (res.data.status == "success") {
+      toast.success(res.data.message, {
+        position: "top-center",
       });
-      setNumOfCartItems(res?.data?.numOfCartItems)
-    }else{
-      toast.error('Product not added ');
+      setNumOfCartItems(res?.data?.numOfCartItems);
+    } else {
+      toast.error("Product not added in cart");
     }
   }
   async function addProductToWishlist(productId) {
     try {
-      
       const { data } = await axios.post(
         "https://ecommerce.routemisr.com/api/v1/wishlist",
         {
@@ -32,9 +31,12 @@ function Product({ product }) {
           },
         }
       );
-      
+      toast.success(data.message, {
+        position: "top-center",
+      });
     } catch (error) {
       console.log(error);
+      toast.error("Product not added in wishlist ");
     }
   }
 
@@ -58,7 +60,6 @@ function Product({ product }) {
         }}
         className="fa-solid fa-heart px-2 "
       ></i>
-
       <button
         onClick={() => {
           addProductToCart(product._id);
