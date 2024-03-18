@@ -1,12 +1,18 @@
-import { toBeChecked } from "@testing-library/jest-dom/matchers";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import { cartContent } from "../../contexts/CartContent";
 import toast from "react-hot-toast";
+import { wishlistContent } from "../../contexts/WishlistContent";
 
 function Product({ product }) {
   const { addToCart, setNumOfCartItems } = useContext(cartContent);
+  const {addToWishlist,removeItemFromWishlist,setWishlistProduct} = useContext(wishlistContent)
+  const [changeColor,setChangeColor] = useState()
+
+  function changeHeart(){
+    setChangeColor(!changeColor)
+  }
   async function addProductToCart(productId) {
     const res = await addToCart(productId);
     if (res.data.status == "success") {
@@ -19,26 +25,18 @@ function Product({ product }) {
     }
   }
   async function addProductToWishlist(productId) {
-    try {
-      const { data } = await axios.post(
-        "https://ecommerce.routemisr.com/api/v1/wishlist",
-        {
-          productId,
-        },
-        {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
-        }
-      );
+    if(!changeColor){
+      const { data } = await addToWishlist(productId)
       toast.success(data.message, {
         position: "top-center",
       });
-    } catch (error) {
-      console.log(error);
-      toast.error("Product not added in wishlist ");
+    } else{
+     const {data} = await removeItemFromWishlist(productId)
+      toast.error("Product remove from wishlist ");
+      setWishlistProduct(data?.data)
     }
-  }
+    }
+    
 
   return (
     <div className="product overflow-hidden px-2 py-3 cursor-pointer">
@@ -56,9 +54,9 @@ function Product({ product }) {
       </Link>
       <i
         onClick={() => {
-          addProductToWishlist(product._id);
+          {addProductToWishlist(product._id)}; changeHeart()
         }}
-        className="fa-solid fa-heart px-2 "
+        className={changeColor ? "fa-solid fa-heart text-danger px-2" :" fa-solid fa-heart px-2 "} 
       ></i>
       <button
         onClick={() => {

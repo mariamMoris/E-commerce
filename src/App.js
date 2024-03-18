@@ -23,6 +23,7 @@ import VerifyCode from "./Components/ForgetPass/VerifyCode";
 import CheckOut from "./Components/CheckOut/CheckOut";
 import Wishlist from "./Components/Wishlist/Wishlist";
 import  CartContentProvider from "./contexts/CartContent"
+import  WishlistContentProvider from "./contexts/WishlistContent"
 import AllOrders from "./Components/AllOrders/AllOrders";
 
 
@@ -34,6 +35,7 @@ function App() {
       path: "",
       element: <Layout />,
       children: [
+        { path: "E-commerce", element: <Navigate to={"/home"} /> },
         { path: "", element: <Navigate to={"home"} /> },
         { path: "home", element: <ProtectedRoute> <Home /> </ProtectedRoute>  },
         { path: "cart", element: <ProtectedRoute> <Cart /> </ProtectedRoute> },
@@ -49,21 +51,19 @@ function App() {
         { path: "forget", element:<AuthProtected> <ForgetPassword/> </AuthProtected>  },
         { path: "verifyCode", element:<AuthProtected> <VerifyCode/> </AuthProtected>  },
         { path: "resetPass", element:<AuthProtected> <ResetPassword/> </AuthProtected>  },
-
-
-
         { path: "*", element: <NotFound /> },
       ],
     },
   ]);
   return (
     <>
-    < CartContentProvider>
+    < WishlistContentProvider>
+    <CartContentProvider>
       <AuthContextProvider>
-        <RouterProvider router={router}></RouterProvider>
-      
+      <RouterProvider router={router}></RouterProvider>
       </AuthContextProvider>
       </ CartContentProvider>
+      </ WishlistContentProvider>
     </>
   );
 }
