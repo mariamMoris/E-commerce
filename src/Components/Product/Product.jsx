@@ -11,7 +11,7 @@ function Product({ product }) {
   const [changeColor,setChangeColor] = useState()
 
   function changeHeart(){
-    setChangeColor(!changeColor)
+     setChangeColor(!changeColor) 
   }
   async function addProductToCart(productId) {
     const res = await addToCart(productId);
@@ -25,16 +25,24 @@ function Product({ product }) {
     }
   }
   async function addProductToWishlist(productId) {
+
     if(!changeColor){
       const { data } = await addToWishlist(productId)
       toast.success(data.message, {
-        position: "top-center",
+        position: "top-right",
       });
+
+      localStorage.setItem("changeColor",!changeColor)
+
     } else{
      const {data} = await removeItemFromWishlist(productId)
       toast.error("Product remove from wishlist ");
       setWishlistProduct(data?.data)
+      setChangeColor(changeColor)
+      localStorage.setItem("changeColor",changeColor)
+
     }
+        console.log(localStorage.getItem("changeColor"));
     }
     
 

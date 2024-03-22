@@ -47,10 +47,10 @@ export default function CheckOut() {
     try {
       setIsLoading(true);
       const {data} = await payment(values)
-      setSuccesMsg(data.message);
-      window.location.href = data.session.url
+      setSuccesMsg(data?.message);
+      window.location.href = data?.session.url
     } catch (error) {
-      setError(error.data.message);
+      setError(error?.data?.message);
     }
     setIsLoading(false);
   }
@@ -65,6 +65,7 @@ export default function CheckOut() {
           </label>
           <input
             onBlur={handleBlur}
+            onChange={handleChange}
             type="text"
             className="form-control mb-3"
             id="details"
@@ -96,6 +97,7 @@ export default function CheckOut() {
           </label>
           <input
             onBlur={handleBlur}
+            onChange={handleChange}
             type="text"
             className="form-control mb-3"
             id="city"
@@ -105,7 +107,7 @@ export default function CheckOut() {
             <p className="alert alert-danger">{errors.city}</p>
           )}
 
-          {errors && (
+          {error && (
             <div className="alert alert-danger text-center">{error}</div>
           )}
           {succesMsg && (

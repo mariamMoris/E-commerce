@@ -10,6 +10,7 @@ export default function Products() {
     const {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/products");
     setIsLoading(false)
     setProducts(data?.data);
+    localStorage.getItem("changeColor")
   }
   useEffect( ()=>{
     getProducts()
