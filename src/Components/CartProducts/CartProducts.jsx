@@ -20,7 +20,7 @@ export default function CartProducts({cartProduct,removeSpecificCartItem,updateC
           <div className="col-md-2">
             <button onClick={()=>{removeSpecificCartItem(cartProduct?.product?._id)}} className='btn text-danger' >Remove</button>
             <div className="d-flex align-items-center">
-              <button onClick={()=>{{updateCartQuantity(cartProduct?.product?._id,count-1)}; setCount(count-1)}} className='btn bg-main text-white mx-2'>-</button>
+              <button disabled={count==1} onClick={()=>{{updateCartQuantity(cartProduct?.product?._id,count-1)}; setCount(count-1)}} className='btn bg-main text-white mx-2'>-</button>
               <span>{count}</span>
               <button onClick={()=>{{updateCartQuantity(cartProduct?.product?._id,count+1)}; setCount(count+1)}} className='btn bg-main text-white mx-2'>+</button>
             </div>

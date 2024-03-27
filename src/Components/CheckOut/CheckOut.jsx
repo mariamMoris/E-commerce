@@ -48,7 +48,7 @@ export default function CheckOut() {
       setIsLoading(true);
       const {data} = await payment(values)
       setSuccesMsg(data?.message);
-      window.location.href = data?.session.url
+      window.location.href = data.session.url
     } catch (error) {
       setError(error?.data?.message);
     }

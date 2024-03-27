@@ -1,20 +1,16 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import Product from '../Product/Product';
+import { useQuery } from 'react-query';
 
 export default function Products() {
-  const [products,setProducts] = useState([])
-  const [isLoading,setIsLoading] = useState()
-  async function getProducts(){
-    setIsLoading(true)
-    const {data} = await axios.get("https://ecommerce.routemisr.com/api/v1/products");
-    setIsLoading(false)
-    setProducts(data?.data);
-    localStorage.getItem("changeColor")
+   function getProducts(){
+    return axios.get("https://ecommerce.routemisr.com/api/v1/products");
   }
-  useEffect( ()=>{
-    getProducts()
-  },[])
+  const {data,isLoading} = useQuery("Products",getProducts,{
+    cacheTime: 5000,
+  })
+
   return(
    <> {isLoading? 
             <>
@@ -25,7 +21,7 @@ export default function Products() {
         :
         <>
          <div className="row">
-    {products?.map((product)=>{
+    {data?.data.data.map((product)=>{
       return (<div key={product._id} className="col-md-3" >
        <Product product={product}/>
        </div>)

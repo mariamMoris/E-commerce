@@ -25,10 +25,14 @@ import Wishlist from "./Components/Wishlist/Wishlist";
 import  CartContentProvider from "./contexts/CartContent"
 import  WishlistContentProvider from "./contexts/WishlistContent"
 import AllOrders from "./Components/AllOrders/AllOrders";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
 
 
 function App() {
  
+  const queryClient = new QueryClient();
 
   const router = createBrowserRouter([
     {
@@ -57,6 +61,7 @@ function App() {
   ]);
   return (
     <>
+    <QueryClientProvider client={queryClient}>
     < WishlistContentProvider>
     <CartContentProvider>
       <AuthContextProvider>
@@ -64,6 +69,9 @@ function App() {
       </AuthContextProvider>
       </ CartContentProvider>
       </ WishlistContentProvider>
+      <ReactQueryDevtools/>
+    </QueryClientProvider>
+    
     </>
   );
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { cartContent } from "../../contexts/CartContent";
 import toast from "react-hot-toast";
@@ -7,11 +7,14 @@ import { wishlistContent } from "../../contexts/WishlistContent";
 
 function Product({ product }) {
   const { addToCart, setNumOfCartItems } = useContext(cartContent);
-  const {addToWishlist,removeItemFromWishlist,setWishlistProduct} = useContext(wishlistContent)
-  const [changeColor,setChangeColor] = useState()
+  const { addToWishlist, removeItemFromWishlist, setWishlistProduct } =
+    useContext(wishlistContent);
+  const [color,setColor] = useState()
+  const [changeColor, setChangeColor] = useState(color);
 
-  function changeHeart(){
-     setChangeColor(!changeColor) 
+
+  function changeHeart() {
+    setChangeColor(!changeColor);
   }
   async function addProductToCart(productId) {
     const res = await addToCart(productId);
@@ -25,26 +28,23 @@ function Product({ product }) {
     }
   }
   async function addProductToWishlist(productId) {
-
-    if(!changeColor){
-      const { data } = await addToWishlist(productId)
+    if (!changeColor) {
+      const { data } = await addToWishlist(productId);
       toast.success(data.message, {
         position: "top-right",
       });
 
-      localStorage.setItem("changeColor",!changeColor)
-
-    } else{
-     const {data} = await removeItemFromWishlist(productId)
+    } else {
+      const { data } = await removeItemFromWishlist(productId);
       toast.error("Product remove from wishlist ");
-      setWishlistProduct(data?.data)
-      setChangeColor(changeColor)
-      localStorage.setItem("changeColor",changeColor)
+      setWishlistProduct(data?.data);
+    }
+    localStorage.setItem("changeColor", !changeColor);
 
-    }
-        console.log(localStorage.getItem("changeColor"));
-    }
-    
+    setColor(localStorage.getItem("changeColor"));
+    console.log(localStorage.getItem("changeColor"));
+
+  }
 
   return (
     <div className="product overflow-hidden px-2 py-3 cursor-pointer">
@@ -62,9 +62,16 @@ function Product({ product }) {
       </Link>
       <i
         onClick={() => {
-          {addProductToWishlist(product._id)}; changeHeart()
+          {
+            addProductToWishlist(product._id);
+          }
+          changeHeart();
         }}
-        className={changeColor ? "fa-solid fa-heart text-danger px-2" :" fa-solid fa-heart px-2 "} 
+        className={
+          changeColor
+            ? "fa-solid fa-heart text-danger px-2"
+            : " fa-solid fa-heart px-2 "
+        }
       ></i>
       <button
         onClick={() => {
